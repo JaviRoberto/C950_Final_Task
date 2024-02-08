@@ -14,7 +14,6 @@ class Packages:
         self.status = status
 
     def print_package(self):
-        x = self.ID + self.address
         print(self.ID)
         print(self.address)
         print(self.city)
