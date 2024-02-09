@@ -23,5 +23,8 @@ class Packages:
         print(self.kilo)
         print(self.status)
 
+    def get_addresz(self):
+        return self.address
+
     #def status_set(self):
 
