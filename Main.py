@@ -194,6 +194,8 @@ class Main:
         truck1.time_total = time
 
     print("Truck 1 has traveled", count.__ceil__(), "miles, with driver", truck1.driver, "and a total time of", truck1.time_total,"hours",)
+    truck3.driver = 1
+    print('Driver 1 has swtiched to truck 3')
 
 
 
@@ -239,7 +241,6 @@ class Main:
     package_address2 = "zero"
     truck_miles = 0
     while i < 13:
-        truck3.driver = 1
         truck_packages_array = truck3.get_packages()
         package_in_place = package_list[truck_packages_array[i-1]]
         package_address = package_in_place.get_addresz()
