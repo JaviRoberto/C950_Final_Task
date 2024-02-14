@@ -194,6 +194,7 @@ class Main:
         truck1.time_total = time
 
     print("Truck 1 has traveled", count.__ceil__(), "miles, with driver", truck1.driver, "and a total time of", truck1.time_total,"hours",)
+    truck3.driver = 0
     truck3.driver = 1
     print('Driver 1 has swtiched to truck 3')
 
@@ -262,6 +263,8 @@ class Main:
     time = count / 18
     truck3.time_total = time
     print("Truck 3 has traveled", count.__ceil__(), "miles, with driver", truck3.driver, "and a total time of", truck3.time_total,"hours",)
+
+
 
 
 
