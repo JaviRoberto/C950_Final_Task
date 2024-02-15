@@ -1,3 +1,5 @@
+import datetime
+
 import rows
 
 import Packages
@@ -16,7 +18,7 @@ pd.options.display.max_rows = 9999
 number1 = 0
 number2 = 0
 
-print("Welcome to the WGUPS routing service by Javier Ochoa! Please wait while data is accessed and Trucks are sent out. ")
+
 
 def find_distance(address1, address2): #given two addreses, finds distance. NOT DONE
     address_array = []
@@ -97,172 +99,106 @@ def find_distance(address1, address2): #given two addreses, finds distance. NOT 
 
     # def get_address(package_num):
 
-
-
-class Main:
-
-
-    package_sheet = pd.read_excel('packages.xlsx', skiprows=[1, 2, 3, 4, 5, 6])
-
+def get_packages():
+    package_sheet = pd.read_excel('packages.xlsx', skiprows=[1, 2, 3, 4, 5, 6,7])
     package_list = []
     for index, row in package_sheet.iterrows():
         x = Packages.Packages(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
         package_list.append(x)
+    return package_list
+
+def sort_packages():
+    arr = get_packages()
+    n = len(arr)
+    swapped = False
+    for i in range(1):
+        for i in range(n):
+            for j in range(0, n-i-2):
+                if find_distance(arr[j].address,arr[j+1].address) > find_distance(arr[j].address,arr[j+2].address):
+                    arr[j], arr[j+1] = arr[j+1], arr[j]
+                    swapped = True
+            if not swapped:
+                break
+        return arr
+
+
+
+
+class Main:
+    package_list = get_packages()
+
+    #print("Welcome to the WGUPS routing service by Javier Ochoa!")
+    #input("Press Enter to sort packages into most efficient delivery pattern")
+
 
     truck1 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 1,
-                           [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40])
+                           [28,32,2,4,5,6,8,9,10,11,12,17,18,21,22,23,24,26,27,28])
+    # Packages #6, #25, #28, #32 arrived late on a flight and are not available to leave the hub before 9:05 a.m..
 
     truck2 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 2,
-                           [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38])
+                           [1,13,14,15,16,19,20,3,18,36,38,37]) #40 is taken out!!!!!
+    # Packages #13, #14, #15. #16, #19, and #20 must go out for delivery on the same truck.
+    #15 needs to be delivered on or before 9:00 am
+    # Packages #3, #18, #36, and #38 may only be delivered by truck 2.
+
 
     truck3 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 0,
-                           [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39])
-    # for i in range(39):
-    # package_list[i].print_package()
-
-    destinations = pd.read_excel('distance.xlsx', skiprows=[1, 2, 3, 4, 5, 6])
-
-    destinations_list = destinations.to_dict(orient='records')
-
-    # print(destinations_list.keys())
-    # print(package_list[1].print_package())
-
-    # for i in range(39):
-    # package_list[i].print_package()
-
-    testdic = {"Ford": ["mustang", "ecoboost", "explorer"], "Porsche": "911", "Toyota": "Prius"}
-
-    address_sheet = "new_distanceCSV.csv"
-
-    # initializing the titles and rows list
-    #
-    distance_array = []
-
-    with open(address_sheet, 'r') as csvfile:  #
-        # creating a csv reader object
-        csvreader = csv.reader(csvfile)
-
-        # extracting field names through first row
-        fields = next(csvreader)
-
-        # extracting each data row one by one
-        for row in csvreader:
-            distance_array.append(row)
-
-    address_array = []
-    address_sheet_names = "new_addressCSV.csv"
-
-    with open(address_sheet_names, 'r') as csvfile:
-        # creating a csv reader object
-        csvreader = csv.reader(csvfile)
-
-        # extracting field names through first row
-        fields = next(csvreader)
-
-        # extracting each data row one by one
-        for row in csvreader:
-            address_array.append(row)
-
-    # get total number of rows
-    # print("Total no. of rows: %d" % csvreader.line_num)  # gets new_address names related to numbers
-    # for i in range(len(distance_array)):
-        # print(distance_array[i][0])
-    # print(address_array[0][3])
+                           [6,9,25,29,30,31,33,34,35,37,39])
+    # Packages #1, 6, 9 13, 14, 16, 20, 25, 29, 30, 31, 34, 37 and 40 need to be delivered on or before 10:30 am
 
 
-    # print(find_distance("300 State St", "2835 Main St"))
-
-    truck_packages_array = []
-    i = 1
-    count = 0
-    package_in_place = 0
-    package_in_place2 = 0
-    package_address2 ="zero"
-    truck_miles = 0
-
-    while i < 14:
-        truck1.driver = 1
-        truck_packages_array = truck1.get_packages()
-        package_in_place = package_list[truck_packages_array[i-1]]
-        package_address = package_in_place.get_addresz()
-        package_in_place2 = package_list[truck_packages_array[i]]
-        package_address2 = package_in_place2.get_addresz()
-        # print((package_address, package_address2))
-        # print(find_distance(package_address, package_address2))
-        count += float(find_distance(package_address, package_address2))
-        placeholder_array = truck1.get_packages()
-        print("Package",package_in_place.ID, "delivered by truck 1 to ", package_address) #xxxxxxxxxxxxx
-        i += 1
-    print("Package",package_in_place2.ID, "delivered by truck 1 to", package_address2), "at time, with all package info"
-    time = count / 18
-    truck1.time_total = time
-
-    print("Truck 1 has traveled", count.__ceil__(), "miles, with driver", truck1.driver, "and a total time of", truck1.time_total,"hours",)
-    truck3.driver = 0
-    truck3.driver = 1
-    print('Driver 1 has swtiched to truck 3')
+# Two drivers and three trucks are available. So, no more than two trucks can be away from the hub at the same time.
+# The trucks move at a constant speed of 18 miles per hour or 0.3 miles per minute.
+# Each truck can carry a maximum of 16 packages.
 
 
 
-###############
-    truck_packages_array = []
-    i = 1
-    count = 0
-    package_in_place = 0
-    package_in_place2 = 0
-    package_address2 ="zero"
-    truck_miles = 0
-    while i < 13:
-        truck2.driver = 2
-        truck_packages_array = truck2.get_packages()
-        package_in_place = package_list[truck_packages_array[i-1]]
-        package_address = package_in_place.get_addresz()
-        package_in_place2 = package_list[truck_packages_array[i]]
-        package_address2 = package_in_place2.get_addresz()
-        # print((package_address, package_address2))
-        # print(find_distance(package_address, package_address2))
-
-        count += float(find_distance(package_address, package_address2))
-        placeholder_array = truck3.get_packages()
-        print("Package",package_in_place.ID, "delivered by truck 2 to", package_list[package_in_place.ID].address)
-        i += 1
-    print("Package",package_in_place2.ID, "delivered by truck 2 to ", package_address2)
+# Package #15 needs to be delivered on or before 9:00 am.
+# Packages #2-5, #7-12, #17-19, #21-24, #26-28, #32-33, #35-36, and #38-39 can be delivered by the end of the day (EOD) which would be 5:00 pm, so there can be some flexibility exercised as regards these packages.
 
 
-    time = count / 18
-    truck2.time_total = time
-    print("Truck 2 has traveled", count.__ceil__(), "miles, with driver", truck2.driver, "and a total time of", truck2.time_total,"hours",)
+#TRUCK 1
+    countz = 0.0
+    total_countz = 0.0
+    truck_packages_array = truck1.get_packages()
+    current_time = datetime.timedelta(0,0,0,0,0,8,)
+    for pacakge_number in truck_packages_array:
+        package_object = package_list[pacakge_number -1]
+        package_object2 = package_list[pacakge_number]
+        countz += float(find_distance(package_object.address,package_object2.address))
+        total_countz += countz
+        current_time += datetime.timedelta(minutes=(countz/18))
+        truck1.time_total = current_time
+        print("Truck 1 has delivered package",package_object.ID, "to", package_object.address, "at time", truck1.time_total)
+    print("Truck 1 total distance is",int(countz), "miles")
+
+    countz = 0.0
+    truck_packages_array = truck2.get_packages()
+    current_time = datetime.timedelta(0,0,0,0,0,8,)
+    for pacakge_number in truck_packages_array:
+        package_object = package_list[pacakge_number -1]
+        package_object2 = package_list[pacakge_number]
+        countz += float(find_distance(package_object.address,package_object2.address))
+        current_time += datetime.timedelta(minutes=countz)
+        truck1.time_total = current_time
+        print("Truck 2 has delivered package",package_object.ID, "to", package_object.address, "at time", truck1.time_total)
+    print("Truck 2 total distance is",int(countz), "miles")
+
+    countz = 0.0
+    truck_packages_array = truck3.get_packages()
+    current_time = datetime.timedelta(0,0,0,0,0,8,)
+    for pacakge_number in truck_packages_array:
+        package_object = package_list[pacakge_number-1]
+        package_object2 = package_list[pacakge_number]
+        countz += float(find_distance(package_object.address,package_object2.address))
+        current_time += datetime.timedelta(minutes=countz)
+        truck1.time_total = current_time
+        print(countz, "Truck 3 has delivered package",package_object.ID, "to", package_object.address, "at time", truck1.time_total)
+    print("Truck 1 total distance is",int(countz), "miles")
 
 
-
-    truck_packages_array = []
-    i = 1
-    count = 0
-    package_in_place = 0
-    package_in_place2 = 0
-    package_address2 = "zero"
-    truck_miles = 0
-    while i < 13:
-        truck_packages_array = truck3.get_packages()
-        package_in_place = package_list[truck_packages_array[i-1]]
-        package_address = package_in_place.get_addresz()
-        package_in_place2 = package_list[truck_packages_array[i]]
-        package_address2 = package_in_place2.get_addresz()
-        # print((package_address, package_address2))
-        # print(find_distance(package_address, package_address2))
-
-        count += float(find_distance(package_address, package_address2))
-        placeholder_array = truck3.get_packages()
-        print("Package",package_in_place.ID, "delivered by truck 3 to", package_list[package_in_place.ID].address)
-        i += 1
-    print("Package",package_in_place2.ID, "delivered by truck 3 to ", package_address2)
-    time = count / 18
-    truck3.time_total = time
-    print("Truck 3 has traveled", count.__ceil__(), "miles, with driver", truck3.driver, "and a total time of", truck3.time_total,"hours",)
-
-
-
-
+for i in sort_packages():
+    print(i.ID, end=",")
 
 
 
