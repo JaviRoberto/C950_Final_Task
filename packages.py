@@ -1,7 +1,6 @@
 
 class Packages:
 
-    print('Hello Package')
 
     def __init__(self, ID, address, city, state, zipcode, deadline, kilo, status):
         self.ID = ID

@@ -8,8 +8,15 @@ import csv
 pd.options.display.max_rows = 9999
 
 
+# todo add package info from object tp print, time delivered, and other stuff
+# todo introduce alogrith to cut down milage, get smallest number, implimnet
+# todo do tasks write up for both papers, task 1 and task 2.
+# todo shceudel meeitng with professor before submiting
+
 number1 = 0
 number2 = 0
+
+print("Welcome to the WGUPS routing service by Javier Ochoa! Please wait while data is accessed and Trucks are sent out. ")
 
 def find_distance(address1, address2): #given two addreses, finds distance. NOT DONE
     address_array = []
@@ -93,6 +100,8 @@ def find_distance(address1, address2): #given two addreses, finds distance. NOT 
 
 
 class Main:
+
+
     package_sheet = pd.read_excel('packages.xlsx', skiprows=[1, 2, 3, 4, 5, 6])
 
     package_list = []
@@ -104,7 +113,7 @@ class Main:
                            [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40])
 
     truck2 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 2,
-                           (2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38))
+                           [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38])
 
     truck3 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 0,
                            [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39])
@@ -180,18 +189,13 @@ class Main:
         package_address2 = package_in_place2.get_addresz()
         # print((package_address, package_address2))
         # print(find_distance(package_address, package_address2))
-        if count == 0:
-            count = (float(find_distance("4001 South 700 East", package_address)))
-            # print(count, "xxxxxx")
-            print("Package",package_in_place.ID, "delivered by truck 1!")
-            pass
-        else:
-            count += float(find_distance(package_address, package_address2))
-            placeholder_array = truck3.get_packages()
-            print("Package",package_in_place2.ID, "delivered by truck 1!")
-            i += 1
-        time = count / 18
-        truck1.time_total = time
+        count += float(find_distance(package_address, package_address2))
+        placeholder_array = truck1.get_packages()
+        print("Package",package_in_place.ID, "delivered by truck 1 to ", package_address) #xxxxxxxxxxxxx
+        i += 1
+    print("Package",package_in_place2.ID, "delivered by truck 1 to", package_address2), "at time, with all package info"
+    time = count / 18
+    truck1.time_total = time
 
     print("Truck 1 has traveled", count.__ceil__(), "miles, with driver", truck1.driver, "and a total time of", truck1.time_total,"hours",)
     truck3.driver = 0
@@ -217,16 +221,13 @@ class Main:
         package_address2 = package_in_place2.get_addresz()
         # print((package_address, package_address2))
         # print(find_distance(package_address, package_address2))
-        if count == 0:
-            count = (float(find_distance("4001 South 700 East", package_address)))
-            # print(count, "xxxxxx")
-            print("Package",package_in_place.ID, "delivered by truck 2!")
-            pass
-        else:
-            count += float(find_distance(package_address, package_address2))
-            placeholder_array = truck3.get_packages()
-            print("Package",package_in_place2.ID, "delivered by truck 2!")
-            i += 1
+
+        count += float(find_distance(package_address, package_address2))
+        placeholder_array = truck3.get_packages()
+        print("Package",package_in_place.ID, "delivered by truck 2 to", package_list[package_in_place.ID].address)
+        i += 1
+    print("Package",package_in_place2.ID, "delivered by truck 2 to ", package_address2)
+
 
     time = count / 18
     truck2.time_total = time
@@ -249,17 +250,12 @@ class Main:
         package_address2 = package_in_place2.get_addresz()
         # print((package_address, package_address2))
         # print(find_distance(package_address, package_address2))
-        if count == 0:
-            count = (float(find_distance("4001 South 700 East", package_address)))
-            # print(count, "xxxxxx")
-            print("Package",package_in_place.ID, "delivered by truck 3!")
-            pass
-        else:
-            count += float(find_distance(package_address, package_address2))
-            placeholder_array = truck3.get_packages()
-            print("Package",package_in_place2.ID, "delivered by truck 3!")
-            i += 1
 
+        count += float(find_distance(package_address, package_address2))
+        placeholder_array = truck3.get_packages()
+        print("Package",package_in_place.ID, "delivered by truck 3 to", package_list[package_in_place.ID].address)
+        i += 1
+    print("Package",package_in_place2.ID, "delivered by truck 3 to ", package_address2)
     time = count / 18
     truck3.time_total = time
     print("Truck 3 has traveled", count.__ceil__(), "miles, with driver", truck3.driver, "and a total time of", truck3.time_total,"hours",)
