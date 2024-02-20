@@ -144,7 +144,7 @@ def sorting(arr):
 
 class Main:
     print("Welcome to the WGUPS Delivery System by Javier Ochoa")
-    input("Press Enter to load trucks based on Package requirments")
+    input("Press Enter to load trucks based on Package requirements")
     package_list = get_packages()
 
     # print("Welcome to the WGUPS routing service by Javier Ochoa!")
@@ -163,7 +163,7 @@ class Main:
     print("Truck 1 has packages: ", truck1.package)
     print("Truck 2 has packages: ", truck2.package)
     print("Truck 3 has packages: ", truck3.package)
-    input("Press Enter to organize the truck packages in an efficient manner using Javier's sorting fuction!")
+    input("Press Enter to organize the truck packages in an efficient manner using Javier's sorting function!")
 
     truckarraytemp = truck1.package
     temp_array = []
