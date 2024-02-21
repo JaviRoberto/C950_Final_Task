@@ -1,4 +1,4 @@
-
+# Javier Ochoa Student ID: 010405717
 class Trucks:
 
     def __init__(self,size, speed, time_departure, time_total, miles, address, driver, package):

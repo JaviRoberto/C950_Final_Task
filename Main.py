@@ -1,23 +1,51 @@
+# Javier Ochoa Student ID: 010405717
+
+
 import datetime
-
 import rows
-
 import Packages
 import pandas as pd
 import Trucks
 import csv
 
+# allows maximum rows for reading exel sheets
 pd.options.display.max_rows = 9999
 
-# todo add package info from object tp print, time delivered, and other stuff
-# todo introduce alogrith to cut down milage, get smallest number, implimnet
 # todo do tasks write up for both papers, task 1 and task 2.
-# todo shceudel meeitng with professor before submiting
+# todo add menu options
+# todo change pandas to CSV
+# todo change get packages to hash
 
+# Global variable for sorting algorith.
 number1 = 0
 number2 = 0
 
 
+def load_package_data():
+    address_array = []
+    package_hash_table = {}
+    address_sheet_names = "packageCSV.csv"
+
+    with open(address_sheet_names, 'r') as csvfile:
+        # creating a csv reader object
+        csvreader = csv.reader(csvfile)
+
+        # extracting field names through first row
+        fields = next(csvreader)
+
+        # extracting each data row one by one
+        for row in csvreader:
+            address_array.append(row)
+
+    for row in address_array:
+        x = Packages.Packages(int(row[0]), row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+        package_hash_table[x.ID] = x
+    return package_hash_table
+
+
+
+
+# Function that finds distances using string address and acceses "new_addressCSV.csv"
 def find_distance(address1, address2):  # given two addreses, finds distance. NOT DONE
 
     address_array = []
@@ -100,7 +128,8 @@ def find_distance(address1, address2):  # given two addreses, finds distance. NO
     # def get_address(package_num):
 
 
-def get_packages():
+# Extracts Package data foe object from 'packages.xlsx'
+def get_packages(): #use hash tables, csv
     package_sheet = pd.read_excel('packages.xlsx', skiprows=[1, 2, 3, 4, 5, 6, 7])
     package_list = []
     for index, row in package_sheet.iterrows():
@@ -109,6 +138,7 @@ def get_packages():
     return package_list
 
 
+# Main sorting algorith (bubble sort type) that orders truck array from delivery least to gratest from packages 1 on.
 def sorting(arr):
     n = len(arr)
     holder_array = []
@@ -142,16 +172,27 @@ def sorting(arr):
     return holder_array
 
 
+# main class
 class Main:
+    # welcome message
+    package_list = []
+    load_package_data()
+
+
+
     print("Welcome to the WGUPS Delivery System by Javier Ochoa")
     input("Press Enter to load trucks based on Package requirements")
-    package_list = get_packages()
 
-    # print("Welcome to the WGUPS routing service by Javier Ochoa!")
-    # input("Press Enter to sort packages into most efficient delivery pattern")
+    # grabs package object from hashtable and puts them in list.
+    hastable = load_package_data()
+    for i in range(1, 41):
+        numberplaceholder = i
+        package_list.append(hastable[numberplaceholder])
 
+
+    # loads trucks objects
     truck1 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 1,
-                           [1, 13, 14, 15, 16, 20, 29, 30, 31, 34, 37, 40])  # 40 belongs here
+                           [1, 13, 14, 15, 16, 20, 29, 30, 31, 34, 37, 40])
 
     truck2 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 2,
                            [3, 6, 12, 17, 18, 19, 21, 22, 23, 24, 26, 27, 35, 36, 38, 39])
@@ -159,12 +200,14 @@ class Main:
     truck3 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 0,
                            [2, 33, 28, 4, 32, 6, 11, 25, 7, 10, 5, 8, 9])
 
+    # shows truck content to user
     print("Trucks have been loaded.")
     print("Truck 1 has packages: ", truck1.package)
     print("Truck 2 has packages: ", truck2.package)
     print("Truck 3 has packages: ", truck3.package)
     input("Press Enter to organize the truck packages in an efficient manner using Javier's sorting function!")
 
+    # sorts truck packages using sorting()
     truckarraytemp = truck1.package
     temp_array = []
     temp_array2 = []
@@ -190,6 +233,7 @@ class Main:
 
     print("")
 
+    # sorts truck 3
     truckarraytemp = truck3.package
     temp_array = []
     temp_array2 = []
@@ -201,6 +245,7 @@ class Main:
         temp_array2.append(v.ID)
     truck3.package = temp_array2
 
+    # shows sorted truck packages
     print("Trucks packages have been organized in order of delivery efficacy!")
     print("Truck 1 has packages: ", truck1.package)
     print("Truck 2 has packages: ", truck2.package)
@@ -214,15 +259,16 @@ class Main:
     # Package #15 needs to be delivered on or before 9:00 am.
     # Packages #2-5, #7-12, #17-19, #21-24, #26-28, #32-33, #35-36, and #38-39 can be delivered by the end of the day (EOD) which would be 5:00 pm, so there can be some flexibility exercised as regards these packages.
 
-    # TRUCK 1
+    # Trucks delivery information
     total_countz = 0.0000001
     truck_packages_array = truck1.get_packages()
     current_time = datetime.timedelta(0, 0, 0, 0, 0, 8, )
-    first_package = package_list[truck1.package[0]-1]
+    first_package = package_list[truck1.package[0] - 1]
     countz = float(find_distance("4001 South 700 East", first_package.address))
     current_time += datetime.timedelta(minutes=(countz * 60 / 18))
     truck1.time_total = current_time
-    print("Truck 1 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address, "at time",
+    print("Truck 1 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address,
+          "at time",
           truck1.time_total)
     for i in range(1, len(truck_packages_array)):
         package1 = truck_packages_array[i - 1]
@@ -237,19 +283,21 @@ class Main:
         # print(package_object.ID, "==", package1,package_object2.ID,"==", package2)
         print("Truck 1 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck1.time_total)
+        package_object2.status = truck1.time_total
+        #print(package_object2.status)
     truck1.miles = int(total_countz)
     print("Truck 1 total distance is", int(total_countz), "miles")
-
 
     # TRUCK 2
     total_countz = 0.0000001
     truck_packages_array = truck2.get_packages()
     current_time = datetime.timedelta(0, 0, 0, 0, 0, 8, )
-    first_package = package_list[truck2.package[0]-1]
+    first_package = package_list[truck2.package[0] - 1]
     countz = float(find_distance("4001 South 700 East", first_package.address))
     current_time += datetime.timedelta(minutes=(countz * 60 / 18))
     truck2.time_total = current_time
-    print("Truck 2 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address, "at time",
+    print("Truck 2 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address,
+          "at time",
           truck2.time_total)
     for i in range(1, len(truck_packages_array)):
         package1 = truck_packages_array[i - 1]
@@ -262,8 +310,10 @@ class Main:
         truck2.time_total = current_time
         # print(find_distance(package_object.address,package_object2.address), "distance")
         # print(package_object.ID, "==", package1,package_object2.ID,"==", package2)
-        print("Truck 2 has delivered package", package_object2.ID, "to", package_object.address, "at time",
+        print("Truck 2 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck2.time_total)
+        package_object2.status = truck2.time_total
+        #print(package_object2.status)
     truck2.miles = int(total_countz)
     print("Truck 2 total distance is", int(total_countz), "miles")
 
@@ -271,11 +321,12 @@ class Main:
     total_countz = 0.0000001
     truck_packages_array = truck3.get_packages()
     current_time = datetime.timedelta(0, 0, 0, 0, 0, 9, )
-    first_package = package_list[truck3.package[0]-1]
+    first_package = package_list[truck3.package[0] - 1]
     countz = float(find_distance("4001 South 700 East", first_package.address))
     current_time += datetime.timedelta(minutes=(countz * 60 / 18))
     truck2.time_total = current_time
-    print("Truck 3 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address, "at time",
+    print("Truck 3 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address,
+          "at time",
           truck3.time_total)
     for i in range(1, len(truck_packages_array)):
         package1 = truck_packages_array[i - 1]
@@ -290,10 +341,13 @@ class Main:
         # print(package_object.ID, "==", package1,package_object2.ID,"==", package2)
         print("Truck 3 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck3.time_total)
+        package_object2.status = truck3.time_total
+        #print(package_object2.status)
     truck3.miles = int(total_countz)
     print("Truck 3 total distance is", int(total_countz), "miles")
 
-
-    print("The day has ended with 40 packages being delivered! Total Distance for all trucks is", truck1.miles + truck2.miles + truck3.miles, "miles.")
+    # Ends program and prints miles for all trucks
+    print("The day has ended with 40 packages being delivered! Total Distance for all trucks is",
+          truck1.miles + truck2.miles + truck3.miles, "miles.")
 # for i in sort_packages():
 # print(i.ID, end=",")
