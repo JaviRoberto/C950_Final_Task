@@ -294,6 +294,6 @@ class Main:
     print("Truck 3 total distance is", int(total_countz), "miles")
 
 
-    print("Total Distance for all trucks is", truck1.miles + truck2.miles + truck3.miles, "miles.")
+    print("The day has ended with 40 packages being delivered! Total Distance for all trucks is", truck1.miles + truck2.miles + truck3.miles, "miles.")
 # for i in sort_packages():
 # print(i.ID, end=",")
