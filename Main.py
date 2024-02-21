@@ -235,7 +235,7 @@ class Main:
         truck1.time_total = current_time
         # print(find_distance(package_object.address,package_object2.address), "distance")
         # print(package_object.ID, "==", package1,package_object2.ID,"==", package2)
-        print("Truck 1 has delivered package", package_object2.ID, "to", package_object.address, "at time",
+        print("Truck 1 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck1.time_total)
     truck1.miles = int(total_countz)
     print("Truck 1 total distance is", int(total_countz), "miles")
@@ -288,7 +288,7 @@ class Main:
         truck3.time_total = current_time
         # print(find_distance(package_object.address,package_object2.address), "distance")
         # print(package_object.ID, "==", package1,package_object2.ID,"==", package2)
-        print("Truck 3 has delivered package", package_object2.ID, "to", package_object.address, "at time",
+        print("Truck 3 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck3.time_total)
     truck3.miles = int(total_countz)
     print("Truck 3 total distance is", int(total_countz), "miles")
