@@ -1,5 +1,4 @@
-# Javier Ochoa Student ID: 010405717
-
+# Javier Ochoa WGU Student ID: 010405717 2/23/24
 
 import datetime
 import rows
@@ -11,16 +10,12 @@ import csv
 # allows maximum rows for reading exel sheets
 pd.options.display.max_rows = 9999
 
-# todo do tasks write up for both papers, task 1 and task 2.
-# todo add menu options
-# todo change pandas to CSV
-# todo change get packages to hash
-
 # Global variable for sorting algorith.
 number1 = 0
 number2 = 0
 
 
+# loads package data in hashmap
 def load_package_data():
     address_array = []
     package_hash_table = {}
@@ -41,8 +36,6 @@ def load_package_data():
         x = Packages.Packages(int(row[0]), row[1], row[2], row[3], row[4], row[5], row[6], row[7])
         package_hash_table[x.ID] = x
     return package_hash_table
-
-
 
 
 # Function that finds distances using string address and acceses "new_addressCSV.csv"
@@ -84,7 +77,7 @@ def find_distance(address1, address2):  # given two addreses, finds distance. NO
     address_sheet = "new_distanceCSV.csv"
 
     # initializing the titles and rows list
-    #
+
     distance_array = []
 
     with open(address_sheet, 'r') as csvfile:  #
@@ -97,8 +90,6 @@ def find_distance(address1, address2):  # given two addreses, finds distance. NO
         # extracting each data row one by one
         for row in csvreader:
             distance_array.append(row)
-
-    # add code that can scan distances. given the number of the two addreses!
 
     distance_array = []
     address_sheet = "new_distanceCSV.csv"
@@ -128,8 +119,8 @@ def find_distance(address1, address2):  # given two addreses, finds distance. NO
     # def get_address(package_num):
 
 
-# Extracts Package data foe object from 'packages.xlsx'
-def get_packages(): #use hash tables, csv
+# Extracts Package data for objects from 'packages.xlsx'
+def get_packages():  # use hash tables, csv
     package_sheet = pd.read_excel('packages.xlsx', skiprows=[1, 2, 3, 4, 5, 6, 7])
     package_list = []
     for index, row in package_sheet.iterrows():
@@ -138,7 +129,7 @@ def get_packages(): #use hash tables, csv
     return package_list
 
 
-# Main sorting algorith (bubble sort type) that orders truck array from delivery least to gratest from packages 1 on.
+# Main sorting algorith (bubble sort type) that orders truck array from delivery least to greatest from packages 1 on.
 def sorting(arr):
     n = len(arr)
     holder_array = []
@@ -178,17 +169,16 @@ class Main:
     package_list = []
     load_package_data()
 
-
-
-    print("Welcome to the WGUPS Delivery System by Javier Ochoa")
-    input("Press Enter to load trucks based on Package requirements, you will have the ability to choose menu options once the program has ran.")
+    print("Welcome to the WGUPS Delivery System by Javier Ochoa, Student ID: 010405717")
+    input(
+        "Press Enter to load trucks based on Package requirements, you will have the ability to choose menu options "
+        "once the program has ran.")
 
     # grabs package object from hashtable and puts them in list.
     hastable = load_package_data()
     for i in range(1, 41):
         numberplaceholder = i
         package_list.append(hastable[numberplaceholder])
-
 
     # loads trucks objects
     truck1 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 1,
@@ -252,13 +242,6 @@ class Main:
     print("Truck 3 has packages: ", truck3.package)
     input("Press Enter to start the day and send the trucks on their way to deliver packages!")
 
-    # Two drivers and three trucks are available. So, no more than two trucks can be away from the hub at the same time.
-    # The trucks move at a constant speed of 18 miles per hour or 0.3 miles per minute.
-    # Each truck can carry a maximum of 16 packages.
-
-    # Package #15 needs to be delivered on or before 9:00 am.
-    # Packages #2-5, #7-12, #17-19, #21-24, #26-28, #32-33, #35-36, and #38-39 can be delivered by the end of the day (EOD) which would be 5:00 pm, so there can be some flexibility exercised as regards these packages.
-
     # Trucks delivery information
     total_countz = 0.0000001
     truck_packages_array = truck1.get_packages()
@@ -285,7 +268,7 @@ class Main:
         print("Truck 1 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck1.time_total)
         package_object2.status = truck1.time_total
-        #print(package_object2.status)
+        # print(package_object2.status)
     truck1.miles = int(total_countz)
     print("Truck 1 total distance is", int(total_countz), "miles")
 
@@ -315,7 +298,7 @@ class Main:
         print("Truck 2 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck2.time_total)
         package_object2.status = truck2.time_total
-        #print(package_object2.status)
+        # print(package_object2.status)
     truck2.miles = int(total_countz)
     print("Truck 2 total distance is", int(total_countz), "miles")
 
@@ -345,7 +328,7 @@ class Main:
         print("Truck 3 has delivered package", package_object2.ID, "to", package_object2.address, "at time",
               truck3.time_total)
         package_object2.status = truck3.time_total
-        #print(package_object2.status)
+        # print(package_object2.status)
     truck3.miles = int(total_countz)
     print("Truck 3 total distance is", int(total_countz), "miles")
 
@@ -353,8 +336,10 @@ class Main:
     print("The day has ended with 40 packages being delivered! Total Distance for all trucks is",
           truck1.miles + truck2.miles + truck3.miles, "miles.")
 
-
-    choice = input("Please enter the function number you would like to run from the menu! \n 1: Print all packages \n 2: Print all trucks \n 3: Print all information \n 4: Print all package IDs and what time it was delivered \n 5: End Program")
+    choice = input(
+        "Please enter the function number you would like to run from the menu! \n 1: Print all packages \n 2: Print "
+        "all trucks \n 3: Print all information \n 4: Print all package IDs and what time it was delivered \n 5: End "
+        "Program")
 
     if choice == '1':
         for j in package_list:
