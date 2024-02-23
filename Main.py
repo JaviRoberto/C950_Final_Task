@@ -181,7 +181,7 @@ class Main:
 
 
     print("Welcome to the WGUPS Delivery System by Javier Ochoa")
-    input("Press Enter to load trucks based on Package requirements")
+    input("Press Enter to load trucks based on Package requirements, you will have the ability to choose menu options once the program has ran.")
 
     # grabs package object from hashtable and puts them in list.
     hastable = load_package_data()
@@ -192,13 +192,13 @@ class Main:
 
     # loads trucks objects
     truck1 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 1,
-                           [1, 13, 14, 15, 16, 20, 29, 30, 31, 34, 37, 40])
+                           [1, 13, 14, 15, 16, 19, 20, 29, 30, 31, 34, 37, 40])
 
     truck2 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 2,
-                           [3, 6, 12, 17, 18, 19, 21, 22, 23, 24, 26, 27, 35, 36, 38, 39])
+                           [3, 6, 12, 17, 18, 21, 22, 23, 24, 26, 27, 35, 36, 38, 39, 25])
 
     truck3 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 0,
-                           [2, 33, 28, 4, 32, 6, 11, 25, 7, 10, 5, 8, 9])
+                           [2, 33, 28, 4, 32, 6, 11, 7, 10, 5, 8, 9])
 
     # shows truck content to user
     print("Trucks have been loaded.")
@@ -270,6 +270,7 @@ class Main:
     print("Truck 1 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address,
           "at time",
           truck1.time_total)
+    first_package.status = truck1.time_total
     for i in range(1, len(truck_packages_array)):
         package1 = truck_packages_array[i - 1]
         package2 = truck_packages_array[i]
@@ -291,7 +292,7 @@ class Main:
     # TRUCK 2
     total_countz = 0.0000001
     truck_packages_array = truck2.get_packages()
-    current_time = datetime.timedelta(0, 0, 0, 0, 0, 8, )
+    current_time = datetime.timedelta(0, 0, 0, 0, 5, 9, )
     first_package = package_list[truck2.package[0] - 1]
     countz = float(find_distance("4001 South 700 East", first_package.address))
     current_time += datetime.timedelta(minutes=(countz * 60 / 18))
@@ -299,6 +300,7 @@ class Main:
     print("Truck 2 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address,
           "at time",
           truck2.time_total)
+    first_package.status = truck1.time_total
     for i in range(1, len(truck_packages_array)):
         package1 = truck_packages_array[i - 1]
         package2 = truck_packages_array[i]
@@ -320,14 +322,15 @@ class Main:
     # TRUCK 3
     total_countz = 0.0000001
     truck_packages_array = truck3.get_packages()
-    current_time = datetime.timedelta(0, 0, 0, 0, 0, 9, )
+    current_time = datetime.timedelta(0, 0, 0, 0, 38, 9, )
     first_package = package_list[truck3.package[0] - 1]
     countz = float(find_distance("4001 South 700 East", first_package.address))
     current_time += datetime.timedelta(minutes=(countz * 60 / 18))
-    truck2.time_total = current_time
+    truck3.time_total = current_time
     print("Truck 3 has left the WGU hub and delivered package", first_package.ID, "to", first_package.address,
           "at time",
           truck3.time_total)
+    first_package.status = truck1.time_total
     for i in range(1, len(truck_packages_array)):
         package1 = truck_packages_array[i - 1]
         package2 = truck_packages_array[i]
@@ -349,5 +352,34 @@ class Main:
     # Ends program and prints miles for all trucks
     print("The day has ended with 40 packages being delivered! Total Distance for all trucks is",
           truck1.miles + truck2.miles + truck3.miles, "miles.")
+
+
+    choice = input("Please enter the function number you would like to run from the menu! \n 1: Print all packages \n 2: Print all trucks \n 3: Print all information \n 4: Print all package IDs and what time it was delivered \n 5: End Program")
+
+    if choice == '1':
+        for j in package_list:
+            print(j.print_package())
+            print("-------")
+    elif choice == '2':
+        print(truck1.print_truck())
+        print(truck2.print_truck())
+        print(truck3.print_truck())
+    elif choice == '3':
+        for j in package_list:
+            print(j.print_package())
+            print("-------")
+        print("---Trucks---")
+        print(truck1.print_truck())
+        print(truck2.print_truck())
+        print(truck3.print_truck())
+    elif choice == '4':
+        for j in package_list:
+            print("Package ID: ", j.ID)
+            print("Time Delivered:", j.status)
+            print("-------")
+    elif choice == '5':
+        print("Exiting program. Goodbye!")
+    else:
+        print("Invalid choice. Please enter a number between 1 and 5.")
 # for i in sort_packages():
 # print(i.ID, end=",")
