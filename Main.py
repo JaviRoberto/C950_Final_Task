@@ -38,6 +38,10 @@ def load_package_data():
     return package_hash_table
 
 
+
+
+
+
 # Function that finds distances using string address and acceses "new_addressCSV.csv"
 def find_distance(address1, address2):  # given two addreses, finds distance. NOT DONE
 
@@ -165,10 +169,10 @@ def sorting(arr):
 
 # main class
 class Main:
-    # welcome message
+    # Javier Ochoa, Student ID: 010405717"
     package_list = []
     load_package_data()
-
+    # welcome message
     print("Welcome to the WGUPS Delivery System by Javier Ochoa, Student ID: 010405717")
     input(
         "Press Enter to load trucks based on Package requirements, you will have the ability to choose menu options "
