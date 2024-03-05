@@ -7,12 +7,50 @@ import pandas as pd
 import Trucks
 import csv
 
+# todo: Inject into hashtable (DONEEEE!!!!!!!)
+# todo: lB lookup funtion
+# todo: menu
+
+
 # allows maximum rows for reading exel sheets
 pd.options.display.max_rows = 9999
 
 # Global variable for sorting algorith.
 number1 = 0
 number2 = 0
+
+
+#takes array of packages, start time, end time, and finds all packages delivered within that time frame.
+def findPackageTime (array, start, end):
+    hour1, min1 = start.split(":")
+    hour2, min2 = end.split(":")
+    hour1int = int(hour1)
+    min1int = int(min1)
+    hour2int = int(hour2)
+    min2int = int(min2)
+    hour1int *= 3600
+    min1int *= 60
+    hour2int *= 3600
+    min2int *= 60
+    if min1int > 59 or min2int > 59 or hour1 > 24 or hour2 > 24:
+        return "Error in time format, please restart program"
+    timeStart = hour1int + min1int
+    timeEnd = hour2int + min2int
+    print(timeStart)
+    print(timeEnd)
+    for j in array:
+        x = int(j.status.total_seconds())
+        if timeStart <= x <= timeEnd:
+            print("ID", j.ID, " time delivered", j.status)
+        else:
+            continue
+
+
+# lookup function that takes ID and returns package object information
+def lookup(idInt):
+    id = str(idInt)
+    hash = load_package_data()
+    return hash[id].address, hash[id].deadline, hash[id].city, hash[id].zipcode, hash[id].kilo, hash[id].status
 
 
 # loads package data in hashmap
@@ -28,18 +66,12 @@ def load_package_data():
         # extracting field names through first row
         fields = next(csvreader)
 
-        # extracting each data row one by one
+        # extracting each data row one by one into the HashTable.
         for row in csvreader:
-            address_array.append(row)
-
-    for row in address_array:
-        x = Packages.Packages(int(row[0]), row[1], row[2], row[3], row[4], row[5], row[6], row[7])
-        package_hash_table[x.ID] = x
+            key = row[0]
+            value = Packages.Packages(int(row[0]), row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+            package_hash_table[key] = value
     return package_hash_table
-
-
-
-
 
 
 # Function that finds distances using string address and acceses "new_addressCSV.csv"
@@ -123,16 +155,6 @@ def find_distance(address1, address2):  # given two addreses, finds distance. NO
     # def get_address(package_num):
 
 
-# Extracts Package data for objects from 'packages.xlsx'
-def get_packages():  # use hash tables, csv
-    package_sheet = pd.read_excel('packages.xlsx', skiprows=[1, 2, 3, 4, 5, 6, 7])
-    package_list = []
-    for index, row in package_sheet.iterrows():
-        x = Packages.Packages(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
-        package_list.append(x)
-    return package_list
-
-
 # Main sorting algorith (bubble sort type) that orders truck array from delivery least to greatest from packages 1 on.
 def sorting(arr):
     n = len(arr)
@@ -171,7 +193,7 @@ def sorting(arr):
 class Main:
     # Javier Ochoa, Student ID: 010405717"
     package_list = []
-    load_package_data()
+    package_object_list = []
     # welcome message
     print("Welcome to the WGUPS Delivery System by Javier Ochoa, Student ID: 010405717")
     input(
@@ -182,7 +204,11 @@ class Main:
     hastable = load_package_data()
     for i in range(1, 41):
         numberplaceholder = i
-        package_list.append(hastable[numberplaceholder])
+        package_list.append(hastable[str(numberplaceholder)])
+
+    for i in range(1, 41):
+        x = hastable[str(i)]
+        package_object_list.append(x)
 
     # loads trucks objects
     truck1 = Trucks.Trucks(16, 18, 8, 0, 0, "4001 South 700 East", 1,
@@ -342,8 +368,8 @@ class Main:
 
     choice = input(
         "Please enter the function number you would like to run from the menu! \n 1: Print all packages \n 2: Print "
-        "all trucks \n 3: Print all information \n 4: Print all package IDs and what time it was delivered \n 5: End "
-        "Program")
+        "all trucks \n 3: Print all information \n 4: Print all package IDs and what time it was delivered \n 5: Print packages based on desired time choice\n8: End "
+        "Program\n")
 
     if choice == '1':
         for j in package_list:
@@ -367,6 +393,11 @@ class Main:
             print("Time Delivered:", j.status)
             print("-------")
     elif choice == '5':
+        start =input("Please insert Start time in 24 hour clock (example: 9:10 or 13:19\n")
+        end = input("Please insert End time in 24 hour clock (example: 9:10 or 13:19\n")
+        print(findPackageTime(package_list, start,end))
+
+    elif choice == '8':
         print("Exiting program. Goodbye!")
     else:
         print("Invalid choice. Please enter a number between 1 and 5.")
