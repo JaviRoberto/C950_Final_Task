@@ -7,9 +7,7 @@ import pandas as pd
 import Trucks
 import csv
 
-# todo: Inject into hashtable (DONEEEE!!!!!!!)
-# todo: lB lookup funtion
-# todo: menu
+
 
 
 # allows maximum rows for reading exel sheets
